@@ -1,4 +1,4 @@
-ompiled source #
+#compiled source #
 ###################
 *.com
 *.class
@@ -40,7 +40,7 @@ Thumbs.db
 # 3rd party files 
 ####
 .idea/
-
+*.swo
 # python vir env
 bin/
 include/
