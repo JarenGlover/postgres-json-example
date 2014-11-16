@@ -5,10 +5,10 @@ __author__ = 'glove'
 import sys,traceback
 import psycopg2
 import argparse 
+import datetime as dt
 
 connection_string = "dbname='json_test' user='postgres' host='127.0.0.1' port='49192' password='postgres'"
 
-FILE = 'daily'
 TABLE = 'daily'
 COLUMN = 'data'
 
@@ -19,12 +19,12 @@ def connect():
     '''
     try:
         conn = psycopg2.connect(connection_string)
-        cur = conn.cursor()
+        cursor = conn.cursor()
     except KeyboardInterrupt:
         print "Shutdown requested because couldn't connect to DB"
     except Exception:
         traceback.print_exc(file=sys.stdout)
-    return cur
+    return (conn,cursor) 
 
 def parse_cmd():
   parser = argparse.ArgumentParser(description='Provide the file name and I will parse it')
@@ -32,36 +32,29 @@ def parse_cmd():
   args = parser.parse_args()
   for line in args.filename:
       FILE =line.readlines()
-  #for f in args.filename:
-  #  print f
-  #  sys.exit
   return FILE
 
-def chomp(cursor,document):
+def chomp(connection, cursor,document):
     '''
     '''
-    #print document 
- #   with open(document,'rb') as datafile:
+    time_now = dt.datetime.now()
+    count = 0
     for line in document:
-        #SQL= 'INSERT INTO %(table) \(%(column)\) VALUES (\'%(data)\')' % {"table":TABLE, "column":COLUMN, "data":line}
-        #SQL = 'INSERT INTO buzzinfo(data) values (\'%s\');' % line
-        #print SQL
-        #print line
-        #cur.execute(SQL,line)
+        SQL= "INSERT INTO %(table)s (%(column)s) VALUES ( \'%(data)s\' )" % {"table":TABLE, "column":COLUMN, "data":line.strip()}
         #print cursor.mogrify(SQL)
-        #  print cur.mogrify(SQL)
-        #cur.execute(SQL)
-        #conn.commit()
-        #print cur.mogrify(SQL)
-        print line
-	sys.exit(187)
-
-
-print "we made it"
-#conn.close()
+        cursor.execute(SQL)
+	
+	if count == 10000:
+          connection.commit()
+          print "100 grand later" 
+          count = 0
+      
+    connection.commit()
+    connection.close()
 
 if __name__ == "__main__":
-    connect()
-    chomp(connect(),parse_cmd())
-    
-
+    connection, cursor = connect()
+    time_now = dt.datetime.now()
+    chomp(connection,cursor,parse_cmd())
+    time_later = dt.datetime.now()
+    print "Time Delta: ", time_later - time_now
