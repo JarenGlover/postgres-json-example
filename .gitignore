@@ -1,4 +1,5 @@
 #compiled source #
+
 ###################
 *.com
 *.class
@@ -41,6 +42,7 @@ Thumbs.db
 ####
 .idea/
 *.swo
+*.swn
 # python vir env
 bin/
 include/

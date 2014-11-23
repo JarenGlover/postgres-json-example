@@ -7,9 +7,9 @@ import psycopg2
 import argparse 
 import datetime as dt
 
-connection_string = "dbname='json_test' user='postgres' host='127.0.0.1' port='49153' password='postgres'"
+connection_string = "dbname='' user='' host='' port='' password=''"
 
-TABLE = 'test'
+TABLE = ''
 COLUMN = 'data'
 
 def connect():
@@ -27,6 +27,8 @@ def connect():
     return (conn,cursor) 
 
 def parse_cmd():
+  '''
+  '''
   parser = argparse.ArgumentParser(description='Provide the file name and I will parse it')
   parser.add_argument('filename', type=argparse.FileType('r'),  help ='filename of the file to be chomped', nargs=1)
   args = parser.parse_args()
@@ -45,15 +47,17 @@ def chomp(connection, cursor,document):
         SQL= "INSERT INTO %(table)s (%(column)s) VALUES ( \'%(data)s\' )" % {"table":TABLE, "column":COLUMN, "data":line.strip()}
         #print cursor.mogrify(SQL)
         cursor.execute(SQL)
-	if count == 5000:
+	if count == 7500:
           connection.commit()
-          print "5K grand later" 
+          print "7.5K grand later" 
           count = 0
         count = count + 1 
     connection.commit()
     connection.close()
 
 if __name__ == "__main__":
+   '''
+   '''
     connection, cursor = connect()
     time_now = dt.datetime.now()
     #print parse_cmd()
