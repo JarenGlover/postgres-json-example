@@ -1,4 +1,4 @@
-__author__ = 'glove'
+__author__ = '@JarenGlover'
 
 #!/usr/bin/python
 
@@ -9,13 +9,18 @@ import datetime as dt
 
 connection_string = "dbname='' user='' host='' port='' password=''"
 
-TABLE = ''
-COLUMN = 'data'
+TABLE = '' 		#Name of the table that your will be inserting data into
+COLUMN = 'data' 	#JSON type column name 
 
 def connect():
-    '''
-     :param
-     :return:
+    ''' Returns a postgres database connection and cursor if succesful
+     Args:
+  	 None
+     Returns:
+     	A connection to DB --> conn
+	A cursor to the DB --> cursor
+     Raises:
+	Exception: if the connection wasn't successful *check connnection_string variable* 
     '''
     try:
         conn = psycopg2.connect(connection_string)
@@ -24,44 +29,48 @@ def connect():
         print "Shutdown requested because couldn't connect to DB"
     except Exception:
         traceback.print_exc(file=sys.stdout)
-    return (conn,cursor) 
+    return (conn,cursor) #please note the order of the return 
 
 def parse_cmd():
-  '''
+  ''' Parse the cmd line for the file you want to process
+	Args:
+	     	None
+	Returns:
+		The file that will be parsed--> filename	
   '''
   parser = argparse.ArgumentParser(description='Provide the file name and I will parse it')
   parser.add_argument('filename', type=argparse.FileType('r'),  help ='filename of the file to be chomped', nargs=1)
   args = parser.parse_args()
-  for line in args.filename:  # <<<< prob not do this
-      #FILE =line.readlines()
-      return line
+  for filename in args.filename:  # <<<< parse the filename from args | maybe not best way 0_o
+      return filename
 
 def chomp(connection, cursor,document):
+    ''' Process the file given and loaded into DB
+	Args:
+		connection: A connection to a DB
+		cursor: A cursor to a DB
+		document: the file you want to be processed into the DB
+	Returns:
+		None	
     '''
-    '''
-    #time_now = dt.datetime.now()
-    count = 0
+    count = 0  # to help to commit to DB after every X rows been processed 
     for line in document:
-        #print line
-	#sys.exit(187)
         SQL= "INSERT INTO %(table)s (%(column)s) VALUES ( \'%(data)s\' )" % {"table":TABLE, "column":COLUMN, "data":line.strip()}
-        #print cursor.mogrify(SQL)
         cursor.execute(SQL)
 	if count == 7500:
           connection.commit()
-          print "7.5K grand later" 
+          print "Still processing 7.5K grand later ..chomp chomp..." 
           count = 0
         count = count + 1 
     connection.commit()
     connection.close()
 
 if __name__ == "__main__":
+   ''' Main function that will run the script
    '''
-   '''
-    connection, cursor = connect()
-    time_now = dt.datetime.now()
-    #print parse_cmd()
-    #sys.exit(187)
-    chomp(connection,cursor,parse_cmd())
-    time_later = dt.datetime.now()
-    print "Time Delta: ", time_later - time_now
+   connection, cursor = connect()
+   print dt.datetime.now()
+   time_now = dt.datetime.now()
+   chomp(connection,cursor,parse_cmd())
+   time_later = dt.datetime.now()
+   print "Time Delta: ", time_later - time_now
