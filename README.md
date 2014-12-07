@@ -1,4 +1,4 @@
-My learnings with JSON + Postgres 9.4 
+My learnings with JSON + Postgres 9.3
 =========
 
 > Dodging raindrops and haters 
