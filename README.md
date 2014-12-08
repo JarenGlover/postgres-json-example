@@ -3,12 +3,13 @@ My learnings with JSON + Postgres 9.3
 This project will hold the lessons learned from a recent data project. This project goal was to take a MongoDB data dump and do some analysis on it. This resulted in me leveraging Postgres's JSON data type and its SQL extension to load and query the data set (~5 Million rows). 
 
 Concepts convered:
+
 1. Load the data dump into Postgres database
 2. **_PENDING_ -** Lessons learned when dealing with a big data set on local enviroment 
 3. **_PENDING_ -** How to query a JSON data struture 
 4. **TBA**
 
-**_Creating a table with JSON datatype_**
+**_Create a table with JSON datatype_**
 >Below is an example of how to create a table that can hold JSON struture data. 
 ```
 CREATE TABLE json_test(ID SERIAL, data JSON);
@@ -37,6 +38,7 @@ If the command is succesfuly you can have reasonable confidence that Postgres wi
 So now that you have confirmed your data struture properly, how do you load the data into the database table? I've created a python script called [loadJSON.py] that will processed a flatfile that has one JSON struture per newline and insert it into the table. Please note you will have to set the TABLE, COLUMN, and connection_string varibles to match your environment. 
 
 There are three core functions that was hold the core logic. 
+
 1. connect - Create and return the connection and cursor to the datbase 
 2. parse_cmd - Prased the cmd line using argparse to obtain filename to be loaded into the DB
 3. chomp - processed line by line the filename returned by the parse_cmd function and inserts the lines into the DB and commiting only aftering 7.5K rows has been procesesed. 
