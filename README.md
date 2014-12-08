@@ -2,6 +2,15 @@ My learnings with JSON + Postgres 9.3
 =========
 This project will hold the lessons learned from a recent data project. This project goal was to take a MongoDB data dump and do some analysis on it. This resulted in me leveraging Postgres's JSON data type and its SQL extension to load and query the data set (~5 Million rows). 
 
+Before you might be asking why Postgres? When Postgres 9.4 comes out it will be more clear. Below is a snippet from  a great [InfoQ] article. 
+>PostgreSQL 9.4 Beta comes with the much-anticipated "binary JSON" type, JSONB. This new storage format for document data is higher-performance and comes with indexing, functions and operators for manipulating JSON data.
+
+>The JSONB type is a confluence of two projects - HStore and JSON. JSONB has everything JSON had, but is more efficient in storage due to the binary representation, and faster due to indexing. Eventually, all current HStore and JSON users are expected to move to JSONB.
+
+>Why would NoSQL features be important for PostgreSQL, when it's traditional user base has been developers needing solid relational capabilities or users switching from enterprise databases such as Oracle? Josh Berkus, one of the core team members, shares some insights.
+
+Now back to the basics ...
+
 Concepts convered:
 
 1. Load the data dump into Postgres database
@@ -21,7 +30,7 @@ Interesting enought the [Postgres Wiki] has something interesting to say about t
 
 Sadly it took me two full days of troubleshooting the [copy] command by using some fancy sed commands to "clean" the data source. So this is why I created a nifty script to solve this problem and to remind myself to not to make the mistake again. Honestly, not sure why this wasn't something was documented more on the interweb. ** < kanye shrugz > ** 
 
-Please note that the JSON data stututre(s) have to abide by the JSON standard format. You can take a sample of your data and test it at [JSONLint] or by the below query.
+Please note that the JSON data stututre(s) have to abide by the JSON standard format. You can take a sample of your data and test it at [JSONLint] or by the below query. Therefore, Postgres validates JSON before saving the document into the database. 
 ```
 SELECT '{"bar": "baz", "balance": 7.77, "active":false}'::json;
                       json                       
@@ -78,4 +87,5 @@ MIT
 [JSONLint]:http://jsonlint.com
 [loadJSON.py]:https://github.com/GloveDotCom/postgres-json-example/blob/master/loadJSON.py
 [Postgres Wiki]:https://wiki.postgresql.org/wiki/COPY
+[InfoQ]:http://www.infoq.com/news/2014/05/postgresql-9-4
 
