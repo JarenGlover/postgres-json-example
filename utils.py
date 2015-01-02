@@ -6,7 +6,7 @@ import json
 
 
 
-def string_json_obj(json_string,strip_assets='',key=None):
+def json_to_list(json_string,strip_assets='',key=None):
     #load string as json
     json_dic = json.loads(json_string)
 
@@ -25,4 +25,4 @@ def string_json_obj(json_string,strip_assets='',key=None):
 #test_string = '''{"hustle": {}, "name": "", "userid": 0.0, "numbers": [20.0, 30.0, 40.0,15.0, 65.0, 20.0],
 #  "nameid": 0.0, "user": "", "time": 87594, "query": {}, "sum": 456.0, "subname": 0.0}'''
 
-#print string_json_obj(test_string,'[]','numbers')
+#print json_to_list(test_string,'[]','numbers')
