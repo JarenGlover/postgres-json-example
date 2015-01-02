@@ -1,6 +1,6 @@
 __author__ = '@JarenGlover'
 
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import sys,traceback
 import psycopg2
